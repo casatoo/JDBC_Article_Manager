@@ -42,7 +42,6 @@ public class Main {
 						System.out.println(articlelist.id +"  "+ articlelist.title);
 					}
 					continue;
-					
 				
 			}
 
