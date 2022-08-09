@@ -16,3 +16,8 @@ DESC article;
 INSERT INTO article SET regDate = NOW(),updateDate = NOW(), title = CONCAT('제목1',RAND()),`body`=CONCAT('내용',RAND());
 
 SELECT * FROM article;
+
+UPDATE article SET 
+title = '제목',
+`body` = '내용'
+WHERE id = 3;
