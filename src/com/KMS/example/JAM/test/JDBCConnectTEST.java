@@ -8,9 +8,9 @@ public class JDBCConnectTEST {
 
 	public static void main(String[] args) {
 		Connection conn = null;
-		String user = "root";
-		String password = "";
-		String url = "jdbc:mysql://127.0.0.1:3306/article_manager?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
+		String user = "user1";
+		String password = "mkop9074!@";
+		String url = "jdbc:mysql://1.234.44.77:3306/article_manager?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
