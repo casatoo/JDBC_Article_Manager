@@ -214,7 +214,7 @@ public class App {
 				rs = pstmt.executeQuery();
 
 				System.out.println("글번호 / 제목 /  내용");
-				while (rs.next()) {
+				if (rs.next()) {
 					int articleId = rs.getInt("id");
 					String regDate = rs.getString("regDate");
 					String updateDate = rs.getString("updateDate");
