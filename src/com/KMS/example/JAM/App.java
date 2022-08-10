@@ -198,6 +198,50 @@ public class App {
 				}
 			}
 
+		}else if (cmd.startsWith("article detail")) {
+			int id = Integer.parseInt(cmd.split(" ")[2]);
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			try {
+				String sql = "SELECT *";
+				sql += " FROM article";
+				sql += " WHERE id = "+id;
+
+				System.out.println(sql);
+
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+
+				System.out.println("글번호 / 제목 /  내용");
+				while (rs.next()) {
+					int articleId = rs.getInt("id");
+					String regDate = rs.getString("regDate");
+					String updateDate = rs.getString("updateDate");
+					String title = rs.getString("title");
+					String body = rs.getString("body");
+
+					Article article = new Article(articleId, regDate, updateDate, title, body);
+					System.out.println(" " + article.id + "    " + article.title+"   "+article.body);
+				}
+			} catch (SQLException e) {
+				System.out.println("에러: " + e);
+			} finally {
+				try {
+					if (rs != null && !rs.isClosed()) {
+						rs.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				try {
+					if (pstmt != null && !pstmt.isClosed()) {
+						pstmt.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		if (cmd.equals("exit")) {
