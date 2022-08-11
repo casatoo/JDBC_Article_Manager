@@ -71,10 +71,10 @@ public class App {
 			SecSql sql = new SecSql();
 
 			sql.append("INSERT INTO article");
-			sql.append(" SET regDate = NOW()");
-			sql.append(", updateDate = NOW()");
-			sql.append(", title = ?", title);
-			sql.append(", `body` = ?", body);
+			sql.append("SET regDate = NOW()");
+			sql.append("updateDate = NOW()");
+			sql.append("title = ?", title);
+			sql.append("`body` = ?", body);
 
 			int id = DBUtil.insert(conn, sql);
 
@@ -141,8 +141,8 @@ public class App {
 			int count = DBUtil.selectRowIntValue(conn, sql);
 			
 			if (count == 0) {
-				System.out.println("글이 존재하지 않습니다.");
-			}else {
+				System.out.printf("%d번 글이 존재하지 않습니다.\n",id);
+			}else if(count == 1){
 			SecSql sql2 = new SecSql();
 			sql2.append("DELETE FROM article");
 			sql2.append("WHERE id = ?", id);
@@ -156,27 +156,46 @@ public class App {
 			int id = Integer.parseInt(cmd.split(" ")[2]);
 
 			SecSql sql = new SecSql();
-
 			sql.append("SELECT *");
 			sql.append("FROM article");
 			sql.append("WHERE id =?", id);
 
 			Map<String, Object> articleMap = DBUtil.selectRow(conn, sql);
+			
+			if (articleMap.isEmpty()) {
+				System.out.printf("%d번 글이 존재하지 않습니다.\n",id);
+				return 0;
+			}
+			
 			Article getArticle = new Article(articleMap);
-			System.out.println(getArticle.id + getArticle.title + getArticle.body);
+			System.out.println(" 글번호 / 제목 / 내용");
+			System.out.println(" 글번호: "+getArticle.id);
+			System.out.println(" 글제목: "+getArticle.title);
+			System.out.println(" 글내용: "+getArticle.body);
+			System.out.println(" 작성일: "+getArticle.regDate);
+			System.out.println(" 수정일: "+getArticle.updateDate);
+			
+			
 
-//		}else if(cmd.equals("member login")) {
-//			String memberId;
-//			String passWord;
-//			String name;
-//			String email;
-//			System.out.printf("아이디 : ");
-//			memberId = sc.nextLine();
-//			System.out.printf("비일번호 : ");
-//			passWord = sc.nextLine();
-//			System.out.printf("이름 : ");
-//			name = sc.nextLine();
-
+		}else if(cmd.equals("member join")) {
+			
+			System.out.printf("아이디 : ");
+			String memberId = sc.nextLine();
+			System.out.printf("비일번호 : ");
+			String passWord = sc.nextLine();
+			System.out.printf("이름 : ");
+			String name = sc.nextLine();
+			System.out.printf("이메일 : ");
+			String email = sc.nextLine();
+			
+			SecSql sql = new SecSql();
+			
+			sql.append("INSERT INTO member");
+			sql.append("SET id = ?",memberId);
+			sql.append("password = ?",passWord);
+			sql.append("name = ?",name);
+			sql.append("`body` = ?",email);
+			
 		}
 		if (cmd.equals("exit")) {
 			System.out.println("프로그램을 종료합니다");
