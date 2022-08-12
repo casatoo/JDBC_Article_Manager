@@ -137,19 +137,19 @@ public class App {
 			sql.append("SELECT COUNT(*)");
 			sql.append("FROM article");
 			sql.append("WHERE id =?", id);
-			
+
 			int count = DBUtil.selectRowIntValue(conn, sql);
-			
+
 			if (count == 0) {
-				System.out.printf("%d번 글이 존재하지 않습니다.\n",id);
-			}else if(count == 1){
-			SecSql sql2 = new SecSql();
-			sql2.append("DELETE FROM article");
-			sql2.append("WHERE id = ?", id);
+				System.out.printf("%d번 글이 존재하지 않습니다.\n", id);
+			} else if (count == 1) {
+				SecSql sql2 = new SecSql();
+				sql2.append("DELETE FROM article");
+				sql2.append("WHERE id = ?", id);
 
-			DBUtil.delete(conn, sql2);
+				DBUtil.delete(conn, sql2);
 
-			System.out.printf("%d번 게시물이 삭제 되었습니다\n", id);
+				System.out.printf("%d번 게시물이 삭제 되었습니다\n", id);
 			}
 
 		} else if (cmd.startsWith("article detail")) {
@@ -161,43 +161,85 @@ public class App {
 			sql.append("WHERE id =?", id);
 
 			Map<String, Object> articleMap = DBUtil.selectRow(conn, sql);
-			
+
 			if (articleMap.isEmpty()) {
-				System.out.printf("%d번 글이 존재하지 않습니다.\n",id);
+				System.out.printf("%d번 글이 존재하지 않습니다.\n", id);
 				return 0;
 			}
-			
+
 			Article getArticle = new Article(articleMap);
 			System.out.println(" 글번호 / 제목 / 내용");
-			System.out.println(" 글번호: "+getArticle.id);
-			System.out.println(" 글제목: "+getArticle.title);
-			System.out.println(" 글내용: "+getArticle.body);
-			System.out.println(" 작성일: "+getArticle.regDate);
-			System.out.println(" 수정일: "+getArticle.updateDate);
-			
-			
+			System.out.println(" 글번호: " + getArticle.id);
+			System.out.println(" 글제목: " + getArticle.title);
+			System.out.println(" 글내용: " + getArticle.body);
+			System.out.println(" 작성일: " + getArticle.regDate);
+			System.out.println(" 수정일: " + getArticle.updateDate);
 
-		}else if(cmd.equals("member join")) {
-			
-			System.out.printf("아이디 : ");
-			String loginId = sc.nextLine();
-			System.out.printf("비일번호 : ");
-			String loginPw = sc.nextLine();
+		} else if (cmd.equals("member join")) {
+			String loginId;
+			String loginPw;
+			String checkLoginPw;
+			String name;
+			String nameNumbering;
+			while (true) {
+				System.out.printf("아이디 : ");
+				loginId = sc.nextLine();
+
+				SecSql idCheckSql = new SecSql();
+				idCheckSql.append("SELECT COUNT(*) FROM");
+				idCheckSql.append("`member` WHERE");
+				idCheckSql.append("loginId= ?", loginId);
+
+				int idCount = DBUtil.selectRowIntValue(conn, idCheckSql);
+
+				if (idCount >= 1) {
+					System.out.println("이미 사용하는 사람이 있는 ID입니다.");
+					continue;
+				} else if (idCount == 0) {
+					break;
+				}
+			}
+			while (true) {
+				System.out.printf("비밀번호 : ");
+				loginPw = sc.nextLine();
+				System.out.printf("비밀번호 확인 : ");
+				checkLoginPw = sc.nextLine();
+				if(!loginPw.equals(checkLoginPw)) {
+					System.out.println("비밀번호가 틀렸습니다.");
+					System.out.println("다시 입력해주세요");
+					continue;
+				}
+				if (loginPw.equals(checkLoginPw)) {
+					break;
+				}
+			}
+
 			System.out.printf("이름 : ");
-			String name = sc.nextLine();
+			name = sc.nextLine();
+			String checkName = name +"%";
+			nameNumbering = name;
+			SecSql nameCheckSql = new SecSql();
+			nameCheckSql.append("SELECT COUNT(*) FROM");
+			nameCheckSql.append("`member` WHERE");
+			nameCheckSql.append("`name` LIKE ?",checkName);
+			
+			int sameNameCount = DBUtil.selectRowIntValue(conn, nameCheckSql);
+			
+			if(sameNameCount>0) {
+				nameNumbering = name += sameNameCount;
+			}
 			
 			SecSql sql = new SecSql();
-			
+
 			sql.append("INSERT INTO `member` SET");
 			sql.append("regDate = NOW()");
 			sql.append(", updateDate = NOW()");
-			sql.append(", loginId = ?",loginId);
-			sql.append(", loginPw = ?",loginPw);
-			sql.append(", `name` = ?",name);
+			sql.append(", loginId = ?", loginId);
+			sql.append(", loginPw = ?", loginPw);
+			sql.append(", `name` = ?", nameNumbering);
 
-			
-			int id = DBUtil.insert(conn, sql);
-			System.out.printf("%d 번 회원님 가입을 환영합니다.\n",id);
+			DBUtil.insert(conn, sql);
+			System.out.printf("%s 회원님 가입을 환영합니다.\n", name);
 		}
 		if (cmd.equals("exit")) {
 			System.out.println("프로그램을 종료합니다");

@@ -36,7 +36,7 @@ regDate DATETIME NOT NULL,
 updateDate DATETIME NOT NULL,
 loginId VARCHAR(100) NOT NULL UNIQUE,
 loginPw VARCHAR(100) NOT NULL,
-`name` VARCHAR(100) NOT NULL);
+`name` VARCHAR(100) NOT NULL UNIQUE);
 
 INSERT INTO `member`(regDate,updateDate,loginId,loginPw,`name`)VALUE
 (NOW(),NOW(),'id1','pw1','홍길동'),
@@ -51,3 +51,12 @@ loginPw = 'pw4',
 `name` = '아무개';
 
 SELECT * FROM `member`;
+
+SELECT COUNT(*) FROM `member` WHERE loginId= 'id1';
+SELECT COUNT(*) FROM `member` WHERE `name` LIKE '홍길동%';
+
+INSERT INTO `member`(regDate,updateDate,loginId,loginPw,`name`)VALUE
+(NOW(),NOW(),'id7','pw7','홍길동');
+
+SELECT COUNT(*) FROM `member` WHERE `name` LIKE '홍길동%';
+
