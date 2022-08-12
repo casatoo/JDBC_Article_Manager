@@ -13,7 +13,11 @@ title VARCHAR(100) NOT NULL,
 
 DESC article;
 
-INSERT INTO article SET regDate = NOW(),updateDate = NOW(), title = CONCAT('제목1',RAND()),`body`=CONCAT('내용',RAND());
+INSERT INTO article SET 
+regDate = NOW(),
+updateDate = NOW(), 
+title = CONCAT('제목1',RAND()),
+`body`=CONCAT('내용',RAND());
 
 SELECT * FROM article;
 
@@ -21,3 +25,29 @@ UPDATE article SET
 title = '제목',
 `body` = '내용'
 WHERE id = 3;
+
+SELECT COUNT(*) FROM article WHERE id = 9;
+
+DROP TABLE IF EXISTS`member`;
+
+CREATE TABLE `member`(
+id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+regDate DATETIME NOT NULL,
+updateDate DATETIME NOT NULL,
+loginId VARCHAR(100) NOT NULL UNIQUE,
+loginPw VARCHAR(100) NOT NULL,
+`name` VARCHAR(100) NOT NULL);
+
+INSERT INTO `member`(regDate,updateDate,loginId,loginPw,`name`)VALUE
+(NOW(),NOW(),'id1','pw1','홍길동'),
+(NOW(),NOW(),'id2','pw2','김철수'),
+(NOW(),NOW(),'id3','pw3','김영희');
+
+INSERT INTO `member` SET 
+regDate = NOW(),
+updateDate = NOW(),
+loginId = 'id4',
+loginPw = 'pw4',
+`name` = '아무개';
+
+SELECT * FROM `member`;

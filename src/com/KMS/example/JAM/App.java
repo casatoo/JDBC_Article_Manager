@@ -71,10 +71,10 @@ public class App {
 			SecSql sql = new SecSql();
 
 			sql.append("INSERT INTO article");
-			sql.append("SET regDate = NOW()");
-			sql.append("updateDate = NOW()");
-			sql.append("title = ?", title);
-			sql.append("`body` = ?", body);
+			sql.append(" SET regDate = NOW()");
+			sql.append(", updateDate = NOW()");
+			sql.append(", title = ?", title);
+			sql.append(", `body` = ?", body);
 
 			int id = DBUtil.insert(conn, sql);
 
@@ -180,22 +180,24 @@ public class App {
 		}else if(cmd.equals("member join")) {
 			
 			System.out.printf("아이디 : ");
-			String memberId = sc.nextLine();
+			String loginId = sc.nextLine();
 			System.out.printf("비일번호 : ");
-			String passWord = sc.nextLine();
+			String loginPw = sc.nextLine();
 			System.out.printf("이름 : ");
 			String name = sc.nextLine();
-			System.out.printf("이메일 : ");
-			String email = sc.nextLine();
 			
 			SecSql sql = new SecSql();
 			
-			sql.append("INSERT INTO member");
-			sql.append("SET id = ?",memberId);
-			sql.append("password = ?",passWord);
-			sql.append("name = ?",name);
-			sql.append("`body` = ?",email);
+			sql.append("INSERT INTO `member` SET");
+			sql.append("regDate = NOW()");
+			sql.append(", updateDate = NOW()");
+			sql.append(", loginId = ?",loginId);
+			sql.append(", loginPw = ?",loginPw);
+			sql.append(", `name` = ?",name);
+
 			
+			int id = DBUtil.insert(conn, sql);
+			System.out.printf("%d 번 회원님 가입을 환영합니다.\n",id);
 		}
 		if (cmd.equals("exit")) {
 			System.out.println("프로그램을 종료합니다");
