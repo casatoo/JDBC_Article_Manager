@@ -1,19 +1,19 @@
-package com.KMS.example.JAM;
+package com.KMS.example.JAM.dto;
 
 import java.time.LocalDateTime;
 
-public class member {
+public class Member {
 	public int id;
 	public LocalDateTime regDate;
 	public LocalDateTime updateDate;
 	public String loginId;
 	public String loginPw;
 	public String name;
-	
-	public member(){
+
+	public Member(){
 	}
 
-	public member(int id, LocalDateTime regDate, LocalDateTime updateDate, String loginId, String loginPw,String name) {
+	public Member(int id, LocalDateTime regDate, LocalDateTime updateDate, String loginId, String loginPw,String name) {
 		this.id = id;
 		this.regDate = regDate;
 		this.updateDate = updateDate;

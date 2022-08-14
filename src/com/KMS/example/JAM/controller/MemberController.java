@@ -1,25 +1,35 @@
 package com.KMS.example.JAM.controller;
 
+import java.sql.Connection;
+import java.util.Scanner;
+
+import com.KMS.example.JAM.dto.Member;
+import com.KMS.example.JAM.service.MemberService;
 import com.KMS.example.JAM.util.DBUtil;
 import com.KMS.example.JAM.util.SecSql;
 
 public class MemberController extends Controller{
+	MemberService memberService;
+	
+	public MemberController(Connection conn, Scanner sc) {
+		super(sc);
+		memberService = new MemberService(conn);
+	}
+	
 	public void doJoin() {
-		String loginId;
-		String loginPw;
+		
+		Member member = new Member();
+		
 		String checkLoginPw;
-		String name;
 		String nameNumbering;
+		
 		while (true) {
 			System.out.printf("아이디 : ");
-			loginId = sc.nextLine();
+			member.loginId = sc.nextLine();
+			
+			memberService.idCheck(member.loginId);
 
-			SecSql idCheckSql = new SecSql();
-			idCheckSql.append("SELECT COUNT(*) FROM");
-			idCheckSql.append("`member` WHERE");
-			idCheckSql.append("loginId= ?", loginId);
-
-			int idCount = DBUtil.selectRowIntValue(conn, idCheckSql);
+			int idCount = memberService.idCheck(member.loginId);
 
 			if (idCount >= 1) {
 				System.out.println("이미 사용하는 사람이 있는 ID입니다.");
@@ -30,45 +40,32 @@ public class MemberController extends Controller{
 		}
 		while (true) {
 			System.out.printf("비밀번호 : ");
-			loginPw = sc.nextLine();
+			member.loginPw = sc.nextLine();
 			System.out.printf("비밀번호 확인 : ");
 			checkLoginPw = sc.nextLine();
-			if(!loginPw.equals(checkLoginPw)) {
+			if(!member.loginPw.equals(checkLoginPw)) {
 				System.out.println("비밀번호가 틀렸습니다.");
 				System.out.println("다시 입력해주세요");
 				continue;
 			}
-			if (loginPw.equals(checkLoginPw)) {
+			if (member.loginPw.equals(checkLoginPw)) {
 				break;
 			}
 		}
 
 		System.out.printf("이름 : ");
-		name = sc.nextLine();
-		String checkName = name +"%";
-		nameNumbering = name;
-		SecSql nameCheckSql = new SecSql();
-		nameCheckSql.append("SELECT COUNT(*) FROM");
-		nameCheckSql.append("`member` WHERE");
-		nameCheckSql.append("`name` LIKE ?",checkName);
+		member.name = sc.nextLine();
+		String checkName = member.name +"%";
+		nameNumbering = member.name;
 		
-		int sameNameCount = DBUtil.selectRowIntValue(conn, nameCheckSql);
+		int sameNameCount = memberService.sameNameCount(checkName);
 		
 		if(sameNameCount>0) {
-			nameNumbering = name += sameNameCount;
+			nameNumbering = member.name+= sameNameCount;
 		}
 		
-		SecSql sql = new SecSql();
-
-		sql.append("INSERT INTO `member` SET");
-		sql.append("regDate = NOW()");
-		sql.append(", updateDate = NOW()");
-		sql.append(", loginId = ?", loginId);
-		sql.append(", loginPw = ?", loginPw);
-		sql.append(", `name` = ?", nameNumbering);
-
-		DBUtil.insert(conn, sql);
-		System.out.printf("%s 회원님 가입을 환영합니다.\n", name);
+		memberService.doJoin(member.loginId,member.loginPw, nameNumbering);
+		System.out.printf("%s 회원님 가입을 환영합니다.\n", member.name);
 	}
 
 }

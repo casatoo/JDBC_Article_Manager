@@ -1,4 +1,4 @@
-package com.KMS.example.JAM;
+package com.KMS.example.JAM.dto;
 
 import java.time.LocalDateTime;
 import java.util.Map;
