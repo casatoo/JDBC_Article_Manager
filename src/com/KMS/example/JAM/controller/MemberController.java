@@ -8,25 +8,27 @@ import com.KMS.example.JAM.service.MemberService;
 import com.KMS.example.JAM.util.DBUtil;
 import com.KMS.example.JAM.util.SecSql;
 
-public class MemberController extends Controller{
+public class MemberController extends Controller {
 	MemberService memberService;
-	
+	Member member;
+	int loginMemberId;
+
 	public MemberController(Connection conn, Scanner sc) {
 		super(sc);
 		memberService = new MemberService(conn);
 	}
-	
+
 	public void doJoin() {
-		
-		Member member = new Member();
-		
+
+		member = new Member();
+
 		String checkLoginPw;
 		String nameNumbering;
-		
+
 		while (true) {
 			System.out.printf("아이디 : ");
 			member.loginId = sc.nextLine();
-			
+
 			memberService.idCheck(member.loginId);
 
 			int idCount = memberService.idCheck(member.loginId);
@@ -43,7 +45,7 @@ public class MemberController extends Controller{
 			member.loginPw = sc.nextLine();
 			System.out.printf("비밀번호 확인 : ");
 			checkLoginPw = sc.nextLine();
-			if(!member.loginPw.equals(checkLoginPw)) {
+			if (!member.loginPw.equals(checkLoginPw)) {
 				System.out.println("비밀번호가 틀렸습니다.");
 				System.out.println("다시 입력해주세요");
 				continue;
@@ -55,17 +57,40 @@ public class MemberController extends Controller{
 
 		System.out.printf("이름 : ");
 		member.name = sc.nextLine();
-		String checkName = member.name +"%";
+		String checkName = member.name + "%";
 		nameNumbering = member.name;
-		
+
 		int sameNameCount = memberService.sameNameCount(checkName);
-		
-		if(sameNameCount>0) {
-			nameNumbering = member.name+= sameNameCount;
+
+		if (sameNameCount > 0) {
+			nameNumbering = member.name += sameNameCount;
 		}
-		
-		memberService.doJoin(member.loginId,member.loginPw, nameNumbering);
+
+		memberService.doJoin(member.loginId, member.loginPw, nameNumbering);
 		System.out.printf("%s 회원님 가입을 환영합니다.\n", member.name);
+	}
+
+	public void doLogin() {
+		
+		member = new Member();
+
+		while (true) {
+			System.out.println("아이디 : ");
+			member.loginId = sc.nextLine();
+			System.out.println("비밀번호 : ");
+			member.loginPw = sc.nextLine();
+
+			int checkIdPw = memberService.doLogin(member.loginId, member.loginPw);
+
+			if (checkIdPw == 0) {
+				System.out.println("아이디 또는 비밀번호가 틀렸습니다.");
+				continue;
+			}else {
+				System.out.printf("%s 님 접속을 환영합니다\n",memberService.getByName(member.loginId)); 
+				loginMemberId = memberService.getById(member.loginId);
+				break;
+			}
+		}
 	}
 
 }

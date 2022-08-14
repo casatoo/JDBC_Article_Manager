@@ -1,10 +1,9 @@
 package com.KMS.example.JAM.service;
 
 import java.sql.Connection;
+import java.util.Map;
 
 import com.KMS.example.JAM.dao.MemberDao;
-import com.KMS.example.JAM.util.DBUtil;
-import com.KMS.example.JAM.util.SecSql;
 
 public class MemberService {
 	Connection conn;
@@ -25,6 +24,14 @@ public class MemberService {
 	public void doJoin(String loginId, String loginPw, String nameNumbering) {
 		memberDao.doJoin(loginId,loginPw,nameNumbering);
 	}
-	
+	public int doLogin(String loginId, String loginPw) {
+		return memberDao.doLogin(loginId,loginPw);
+	}
+	public String getByName(String loginId) {
+		return memberDao.getByName(loginId);
+	}
+	public int getById(String loginId) {
+		return memberDao.getById(loginId);
+	}
 	
 }

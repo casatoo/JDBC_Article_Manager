@@ -83,7 +83,10 @@ public class App {
 
 		} else if (cmd.equals("member join")) {
 			memberController.doJoin();
-		}	else {
+			
+		} else if (cmd.equals("member login")) {
+			memberController.doLogin();
+		} else {
 				System.out.println("존재하지 않는 명령어 입니다");
 		}
 		return 0;
