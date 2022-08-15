@@ -86,10 +86,21 @@ public class MemberController extends Controller {
 				continue;
 			}else {
 				Member getMember = new Member(memberMap);
-				System.out.printf("%s 님 접속을 환영합니다\n",getMember.name); 
-				loginMemberId = getMember.id;
+				System.out.printf("%s 님 접속을 환영합니다\n",getMember.name);
+				loginedMember = getMember;
 				break;
 			}
+		}
+	}
+	public void showProfile() {
+		if(Controller.logincheck()) {
+			System.out.println("회원 번호: "+loginedMember.id);
+			System.out.println("회원 이름: "+loginedMember.name);
+			System.out.println("회원 아이디: "+loginedMember.loginId);
+			System.out.println("회원 비밀번호: "+loginedMember.loginPw);
+			System.out.println("회원 가입일: "+loginedMember.regDate);
+		}else {
+			System.out.println("로그인 해주세요");
 		}
 	}
 
