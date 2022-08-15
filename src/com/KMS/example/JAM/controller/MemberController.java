@@ -1,12 +1,11 @@
 package com.KMS.example.JAM.controller;
 
 import java.sql.Connection;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.KMS.example.JAM.dto.Member;
 import com.KMS.example.JAM.service.MemberService;
-import com.KMS.example.JAM.util.DBUtil;
-import com.KMS.example.JAM.util.SecSql;
 
 public class MemberController extends Controller {
 	MemberService memberService;
@@ -75,19 +74,20 @@ public class MemberController extends Controller {
 		member = new Member();
 
 		while (true) {
-			System.out.println("아이디 : ");
+			System.out.printf("아이디 : ");
 			member.loginId = sc.nextLine();
-			System.out.println("비밀번호 : ");
+			System.out.printf("비밀번호 : ");
 			member.loginPw = sc.nextLine();
+			
+			Map<String, Object> memberMap = memberService.getMember(member.loginId, member.loginPw);
 
-			int checkIdPw = memberService.doLogin(member.loginId, member.loginPw);
-
-			if (checkIdPw == 0) {
+			if (memberMap.isEmpty()) {
 				System.out.println("아이디 또는 비밀번호가 틀렸습니다.");
 				continue;
 			}else {
-				System.out.printf("%s 님 접속을 환영합니다\n",memberService.getByName(member.loginId)); 
-				loginMemberId = memberService.getById(member.loginId);
+				Member getMember = new Member(memberMap);
+				System.out.printf("%s 님 접속을 환영합니다\n",getMember.name); 
+				loginMemberId = getMember.id;
 				break;
 			}
 		}

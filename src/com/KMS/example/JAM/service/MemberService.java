@@ -24,14 +24,8 @@ public class MemberService {
 	public void doJoin(String loginId, String loginPw, String nameNumbering) {
 		memberDao.doJoin(loginId,loginPw,nameNumbering);
 	}
-	public int doLogin(String loginId, String loginPw) {
-		return memberDao.doLogin(loginId,loginPw);
-	}
-	public String getByName(String loginId) {
-		return memberDao.getByName(loginId);
-	}
-	public int getById(String loginId) {
-		return memberDao.getById(loginId);
+	public Map getMember(String loginId,String loginPw) {
+		return memberDao.getMember(loginId,loginPw);
 	}
 	
 }

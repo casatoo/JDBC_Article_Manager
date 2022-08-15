@@ -1,6 +1,7 @@
 package com.KMS.example.JAM.dao;
 
 import java.sql.Connection;
+import java.util.Map;
 
 import com.KMS.example.JAM.util.DBUtil;
 import com.KMS.example.JAM.util.SecSql;
@@ -43,26 +44,13 @@ public class MemberDao {
 
 		DBUtil.insert(conn, sql);
 	}
-	public int doLogin(String loginId, String loginPw) {
+	public Map getMember(String loginId, String loginPw) {
 		SecSql sql = new SecSql();
-		sql.append("SELECT COUNT(*) FROM");
+		sql.append("SELECT * FROM");
 		sql.append("`member` WHERE");
 		sql.append("loginId = ?",loginId);
 		sql.append("AND loginPw = ?",loginPw);
-		return DBUtil.selectRowIntValue(conn,sql);
+		return DBUtil.selectRow(conn,sql);
 	}
-	public String getByName(String loginId) {
-		SecSql sql = new SecSql();
-		sql.append("SELECT `name` FROM `member`");
-		sql.append("WHERE loginId = ?",loginId);
-		return DBUtil.selectRowStringValue(conn,sql);
-	}
-	public int getById(String loginId) {
-		SecSql sql = new SecSql();
-		sql.append("SELECT id FROM");
-		sql.append("`member` WHERE");
-		sql.append("loginId = ?",loginId);
-		
-		return DBUtil.selectRowIntValue(conn,sql);
-	}
+	
 }

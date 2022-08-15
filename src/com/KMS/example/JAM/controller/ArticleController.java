@@ -94,6 +94,8 @@ public class ArticleController extends Controller {
 		int id = Integer.parseInt(cmd.split(" ")[2]);
 
 		Map<String, Object> articleMap = articleService.showDetail(id);
+		
+		System.out.println(articleMap);
 
 		if (articleMap.isEmpty()) {
 			System.out.printf("%d번 글이 존재하지 않습니다.\n", id);
