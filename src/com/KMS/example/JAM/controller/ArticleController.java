@@ -1,15 +1,12 @@
 package com.KMS.example.JAM.controller;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import com.KMS.example.JAM.dto.Article;
 import com.KMS.example.JAM.service.ArticleService;
-import com.KMS.example.JAM.util.DBUtil;
-import com.KMS.example.JAM.util.SecSql;
 
 public class ArticleController extends Controller {
 	ArticleService articleService;
@@ -20,13 +17,20 @@ public class ArticleController extends Controller {
 	}
 
 	public void doWrite() {
+		
+		if(!Controller.logincheck()) {
+			System.out.println("로그인이 필요한 서비스 입니다.");
+			return;
+		}
+		int writer = loginedMember.id;
+		
 		System.out.println("== 게시물 작성 ==");
 		System.out.printf("제목 : ");
 		String title = sc.nextLine();
 		System.out.printf("내용 : ");
 		String body = sc.nextLine();
 
-		int id = articleService.doWrite(title, body);
+		int id = articleService.doWrite(title, body, writer);
 
 		System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
 	}
@@ -36,6 +40,23 @@ public class ArticleController extends Controller {
 			return;
 		}
 		int id = Integer.parseInt(cmd.split(" ")[2]);
+		
+		Map<String, Object> articleMap = articleService.showDetail(id);
+		
+		if (articleMap.isEmpty()) {
+			System.out.printf("%d번 글이 존재하지 않습니다.\n", id);
+			return;
+		}
+		if(!Controller.logincheck()) {
+			System.out.println("로그인이 필요한 서비스 입니다.");
+			return;
+		}
+		int matchLoginMember = articleService.matchLoginMember(id);
+		
+		if(matchLoginMember!=loginedMember.id) {
+			System.out.println("글 작성자만 수정할 수 있습니다.");
+			return;
+		}
 
 		System.out.printf("== %d번 게시물 수정 ==\n", id);
 		System.out.printf("새 제목 : ");

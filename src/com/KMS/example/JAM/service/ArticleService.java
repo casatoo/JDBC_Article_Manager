@@ -15,8 +15,8 @@ public class ArticleService {
 		articleDao = new ArticleDao(conn);
 	}
 
-	public int doWrite(String title, String body) {
-		return articleDao.doWrite(title,body);
+	public int doWrite(String title, String body, int writer) {
+		return articleDao.doWrite(title,body, writer);
 	}
 
 	public void doModify(String title, String body, int id) {
@@ -36,6 +36,10 @@ public class ArticleService {
 	
 	public Map showDetail(int id) {
 		return articleDao.showDetail(id);
+	}
+	
+	public int matchLoginMember(int id) {
+		return articleDao.matchLoginMember(id);
 	}
 	
 	

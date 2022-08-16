@@ -11,7 +11,8 @@ id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 regDate DATETIME NOT NULL,
 updateDate DATETIME NOT NULL,
 title VARCHAR(100) NOT NULL,
-`body` TEXT NOT NULL);
+`body` TEXT NOT NULL,
+writer INT NOT NULL);
 
 DESC article;
 
@@ -40,6 +41,7 @@ loginId VARCHAR(100) NOT NULL UNIQUE,
 loginPw VARCHAR(100) NOT NULL,
 `name` VARCHAR(100) NOT NULL UNIQUE);
 
+
 INSERT INTO `member`(regDate,updateDate,loginId,loginPw,`name`)VALUE
 (NOW(),NOW(),'id1','pw1','홍길동'),
 (NOW(),NOW(),'id2','pw2','김철수'),
@@ -57,3 +59,14 @@ SELECT * FROM `member`;
 SELECT COUNT(*) FROM `member` WHERE loginId= 'id1';
 SELECT COUNT(*) FROM `member` WHERE `name` LIKE '홍길동%';
 
+
+SELECT COUNT(*) FROM `member` WHERE
+loginId = 'id2' AND loginPw = 'pw2';
+
+SELECT `name` FROM `member` WHERE
+id = 2;
+
+SELECT id FROM `member` WHERE
+loginId = 'id3';
+
+ALTER TABLE article ADD COLUMN writer INT NOT NULL;

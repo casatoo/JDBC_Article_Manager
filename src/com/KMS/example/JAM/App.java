@@ -65,6 +65,7 @@ public class App {
 		MemberController memberController = new MemberController(conn,sc);
 		
 		ArticleController articleController = new ArticleController(conn,sc);
+		
 
 		if (cmd.equals("article write")) {
 			articleController.doWrite();
@@ -86,10 +87,13 @@ public class App {
 			
 		} else if (cmd.equals("member login")) {
 			memberController.doLogin();
+			
 		} else if(cmd.equals("member profile")) {
 			memberController.showProfile();
-		}else {
-				System.out.println("존재하지 않는 명령어 입니다");
+			
+		} else {
+			System.out.println("존재하지 않는 명령어 입니다");
+			
 		}
 		return 0;
 	}

@@ -16,7 +16,7 @@ public class ArticleDao {
 		this.conn = conn;
 	}
 	
-	public int doWrite(String title,String body) {
+	public int doWrite(String title,String body, int writer) {
 		SecSql sql = new SecSql();
 
 		sql.append("INSERT INTO article");
@@ -24,6 +24,7 @@ public class ArticleDao {
 		sql.append(", updateDate = NOW()");
 		sql.append(", title = ?", title);
 		sql.append(", `body` = ?", body);
+		sql.append(", writer = ?", writer);
 
 		int id = DBUtil.insert(conn, sql);
 
@@ -87,6 +88,15 @@ public class ArticleDao {
 
 		Map<String, Object> articleMap = DBUtil.selectRow(conn, sql);
 		return articleMap;
+	}
+	
+	public int matchLoginMember(int id) {
+		SecSql sql = new SecSql();
+		sql.append("SELECT writer");
+		sql.append("FROM article");
+		sql.append("WHERE id =?", id);
+		
+		return DBUtil.selectRowIntValue(conn, sql);
 	}
 	
 }

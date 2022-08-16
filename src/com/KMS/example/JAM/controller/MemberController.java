@@ -10,7 +10,6 @@ import com.KMS.example.JAM.service.MemberService;
 public class MemberController extends Controller {
 	MemberService memberService;
 	Member member;
-	int loginMemberId;
 
 	public MemberController(Connection conn, Scanner sc) {
 		super(sc);
@@ -72,6 +71,10 @@ public class MemberController extends Controller {
 	public void doLogin() {
 		
 		member = new Member();
+		if(Controller.logincheck()) {
+			System.out.println("이미 로그인 하였습니다.");
+			return;
+		}
 
 		while (true) {
 			System.out.printf("아이디 : ");
@@ -103,5 +106,6 @@ public class MemberController extends Controller {
 			System.out.println("로그인 해주세요");
 		}
 	}
+	
 
 }

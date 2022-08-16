@@ -10,19 +10,22 @@ public class Article extends Object {
 	public LocalDateTime updateDate;
 	public String title;
 	public String body;
+	public int writer;
 
-	public Article(int id, LocalDateTime regDate, LocalDateTime updateDate, String title, String body) {
+	public Article(int id, LocalDateTime regDate, LocalDateTime updateDate, String title, String body, int writer) {
 		this.id = id;
 		this.regDate = regDate;
 		this.updateDate = updateDate;
 		this.title = title;
 		this.body = body;
+		this.writer = writer;
 	}
 
-	public Article(int id, String title, String body) {
+	public Article(int id, String title, String body, int writer) {
 		this.id = id;
 		this.title = title;
 		this.body = body;
+		this.writer = writer;
 	}
 	
 
@@ -32,12 +35,7 @@ public class Article extends Object {
 		this.body = (String) articleMap.get("body");
 		this.regDate = (LocalDateTime) articleMap.get("regDate");
 		this.updateDate = (LocalDateTime) articleMap.get("updateDate");
-	}
-
-	@Override
-	public String toString() {
-		return "Article [id=" + id + ", regDate=" + regDate + ", updateDate=" + updateDate + ", title=" + title
-				+ ", body=" + body + "]";
+		this.writer = (int) articleMap.get("writer");
 	}
 
 }
