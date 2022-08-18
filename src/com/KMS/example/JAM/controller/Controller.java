@@ -8,12 +8,12 @@ import com.KMS.example.JAM.dto.Member;
 public abstract class Controller {
 	public Connection conn;
 	public Scanner sc;
+	public static Member loginedMember = null;
 	
 	public Controller(Scanner sc) {
 		this.sc = sc;
 	}
 	
-	public static Member loginedMember = null;
 	
 	public static boolean logincheck() {
 		if(loginedMember != null) {

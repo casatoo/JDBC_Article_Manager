@@ -106,6 +106,13 @@ public class MemberController extends Controller {
 			System.out.println("로그인 해주세요");
 		}
 	}
-	
+	public void doLogout() {
+		if(!Controller.logincheck()) {
+			System.out.println("로그인이 되지 않았습니다.");
+			return;
+		}
+		loginedMember =null;
+		System.out.println("로그아웃 되었습니다.");
+	}
 
 }

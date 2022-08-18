@@ -91,7 +91,11 @@ public class App {
 		} else if(cmd.equals("member profile")) {
 			memberController.showProfile();
 			
+		} else if(cmd.equals("member logout")){
+		
+			memberController.doLogout();
 		} else {
+
 			System.out.println("존재하지 않는 명령어 입니다");
 			
 		}
