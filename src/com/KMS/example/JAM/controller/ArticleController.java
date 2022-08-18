@@ -36,6 +36,10 @@ public class ArticleController extends Controller {
 	}
 
 	public void doModify(String cmd) {
+		if(!Controller.logincheck()) {
+			System.out.println("로그인이 필요한 서비스 입니다.");
+			return;
+		}
 		if (!noListNumber(cmd)) {
 			return;
 		}
@@ -45,10 +49,6 @@ public class ArticleController extends Controller {
 		
 		if (articleMap.isEmpty()) {
 			System.out.printf("%d번 글이 존재하지 않습니다.\n", id);
-			return;
-		}
-		if(!Controller.logincheck()) {
-			System.out.println("로그인이 필요한 서비스 입니다.");
 			return;
 		}
 		int matchLoginMember = articleService.matchLoginMember(id);
@@ -73,15 +73,15 @@ public class ArticleController extends Controller {
 		System.out.println("== 게시물 리스트 ==");
 
 		List<Article> articles = articleService.showList();
-
+		
 		if (articles.size() == 0) {
 			System.out.println("게시물이 없습니다");
 			return 0;
 		}
-		System.out.println("번호  /  제목");
+		System.out.println("번호  /  제목   / 작성자  / 조회수");
 
 		for (Article article : articles) {
-			System.out.printf("%d  /  %s\n", article.id, article.title);
+			System.out.printf("%d  /  %s    / %s   / %d\n", article.id, article.title, article.name, article.hit);
 		}
 		return 1;
 	}
@@ -107,16 +107,17 @@ public class ArticleController extends Controller {
 	}
 
 	public int showDetail(String cmd) {
+		
 
 		if (!noListNumber(cmd)) {
 			return 0;
 		}
 
 		int id = Integer.parseInt(cmd.split(" ")[2]);
+		
+		articleService.incrementHit(id);
 
 		Map<String, Object> articleMap = articleService.showDetail(id);
-		
-		System.out.println(articleMap);
 
 		if (articleMap.isEmpty()) {
 			System.out.printf("%d번 글이 존재하지 않습니다.\n", id);
@@ -124,12 +125,11 @@ public class ArticleController extends Controller {
 		}
 
 		Article getArticle = new Article(articleMap);
-		System.out.println(" 글번호 / 제목 / 내용");
 		System.out.println(" 글번호: " + getArticle.id);
 		System.out.println(" 글제목: " + getArticle.title);
 		System.out.println(" 글내용: " + getArticle.body);
-		System.out.println(" 작성일: " + getArticle.regDate);
-		System.out.println(" 수정일: " + getArticle.updateDate);
+		System.out.println(" 작성자: " + getArticle.name);
+		System.out.println(" 조회수: " + getArticle.hit);
 
 		return 1;
 	}

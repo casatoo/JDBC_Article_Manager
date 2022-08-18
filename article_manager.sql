@@ -12,7 +12,8 @@ regDate DATETIME NOT NULL,
 updateDate DATETIME NOT NULL,
 title VARCHAR(100) NOT NULL,
 `body` TEXT NOT NULL,
-writer INT NOT NULL);
+writer INT NOT NULL,
+hit INT NOT NULL);
 
 DESC article;
 
@@ -21,6 +22,14 @@ regDate = NOW(),
 updateDate = NOW(), 
 title = CONCAT('제목1',RAND()),
 `body`=CONCAT('내용',RAND());
+
+INSERT INTO article(regDate,updateDate,title,`body`,writer,hit)VALUE
+(NOW(),NOW(),CONCAT('제목',RAND()),CONCAT('내용',RAND()),1,5),
+(NOW(),NOW(),CONCAT('제목',RAND()),CONCAT('내용',RAND()),2,5),
+(NOW(),NOW(),CONCAT('제목',RAND()),CONCAT('내용',RAND()),3,7),
+(NOW(),NOW(),CONCAT('제목',RAND()),CONCAT('내용',RAND()),3,8),
+(NOW(),NOW(),CONCAT('제목',RAND()),CONCAT('내용',RAND()),2,10),
+(NOW(),NOW(),CONCAT('제목',RAND()),CONCAT('내용',RAND()),1,11);
 
 SELECT * FROM article;
 
@@ -70,3 +79,11 @@ SELECT id FROM `member` WHERE
 loginId = 'id3';
 
 ALTER TABLE article ADD COLUMN writer INT NOT NULL;
+
+SELECT writer FROM article WHERE id = 1;
+
+SELECT `name` FROM `member` WHERE id = 1;
+
+SELECT article.*,member.`name` FROM article INNER JOIN `member` ON article.writer = member.id ORDER BY id DESC;
+
+SELECT article.*,member.`name` FROM article INNER JOIN `member` ON article.writer = member.id WHERE article.id = 1;

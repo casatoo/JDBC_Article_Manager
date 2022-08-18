@@ -2,9 +2,11 @@ package com.KMS.example.JAM.service;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.KMS.example.JAM.dao.ArticleDao;
+import com.KMS.example.JAM.dto.Article;
 
 public class ArticleService {
 	Connection conn;
@@ -23,7 +25,7 @@ public class ArticleService {
 		articleDao.doModify(title,body,id);
 	}
 	
-	public ArrayList showList() {	
+	public List<Article> showList() {	
 		return articleDao.showList();
 	}
 	
@@ -42,6 +44,7 @@ public class ArticleService {
 		return articleDao.matchLoginMember(id);
 	}
 	
-	
-
+	public void incrementHit(int id) {
+		articleDao.incrementHit(id);
+	}
 }

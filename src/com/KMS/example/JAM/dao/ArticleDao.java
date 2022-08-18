@@ -42,16 +42,18 @@ public class ArticleDao {
 		DBUtil.update(conn, sql);
 	}
 	
-	public ArrayList showList() {
-		
-		ArrayList<Article> articles = new ArrayList<>();
+	public List<Article> showList() {
 		SecSql sql = new SecSql();
 
-		sql.append("SELECT *");
-		sql.append("FROM article");
+		sql.append("SELECT article.*,member.`name`");
+		sql.append("FROM article INNER JOIN");
+		sql.append("`member` ON");
+		sql.append("article.writer = member.id");
 		sql.append("ORDER BY id DESC");
 
 		List<Map<String, Object>> articlesListMap = DBUtil.selectRows(conn, sql);
+		
+		List<Article> articles = new ArrayList<>();
 
 		for (Map<String, Object> articleMap : articlesListMap) {
 			articles.add(new Article(articleMap));
@@ -82,11 +84,14 @@ public class ArticleDao {
 	public Map showDetail(int id) {
 		
 		SecSql sql = new SecSql();
-		sql.append("SELECT *");
-		sql.append("FROM article");
-		sql.append("WHERE id =?", id);
+		sql.append("SELECT article.*,member.`name`");
+		sql.append("FROM article INNER JOIN");
+		sql.append("`member` ON article.writer = member.id");
+		sql.append("WHERE article.id = ?", id);
+		
 
 		Map<String, Object> articleMap = DBUtil.selectRow(conn, sql);
+		
 		return articleMap;
 	}
 	
@@ -97,6 +102,15 @@ public class ArticleDao {
 		sql.append("WHERE id =?", id);
 		
 		return DBUtil.selectRowIntValue(conn, sql);
+	}
+	
+	public void incrementHit(int id) {
+		SecSql sql = new SecSql();
+		sql.append("UPDATE article");
+		sql.append("SET hit = hit+1");
+		sql.append("WHERE id = ?", id);
+		
+		DBUtil.update(conn, sql);
 	}
 	
 }
